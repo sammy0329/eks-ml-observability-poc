@@ -1,0 +1,14 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: "default"
+  group_by: ["alertname", "severity"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 1h
+
+receivers:
+  - name: "default"
+    # PoC 환경: 실제 알림 전송 없이 Alertmanager UI에서만 확인
+    # 운영 환경에서는 slack_configs / email_configs 추가
