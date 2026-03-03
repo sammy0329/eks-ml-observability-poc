@@ -49,6 +49,25 @@ class TestMissingRate:
         assert result.is_anomaly is False
 
 
+class TestEdgeCases:
+    def test_single_value_returns_ok(self):
+        # 유효값 1개 — 판단 불가, ok 반환 (line 38 커버)
+        result = detect_anomaly([1.0])
+        assert result.is_anomaly is False
+        assert result.anomaly_score == 0.0
+
+    def test_constant_values_returns_ok(self):
+        # std == 0 — Z-score 계산 불가 (line 44 커버)
+        result = detect_anomaly([5.0, 5.0, 5.0, 5.0])
+        assert result.is_anomaly is False
+        assert result.reason == "ok"
+
+    def test_two_values_no_drift(self):
+        # 최소 유효값 케이스 (mid==1)
+        result = detect_anomaly([1.0, 1.0])
+        assert result.is_anomaly is False
+
+
 class TestDrift:
     def test_drift_detected(self):
         # 전반부 평균 ~1.0, 후반부 평균 ~20.0 — 반쪽 std 기준으로 drift_score >> threshold

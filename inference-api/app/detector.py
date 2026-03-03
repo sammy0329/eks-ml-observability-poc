@@ -56,12 +56,9 @@ def detect_anomaly(
         )
 
     # 3. 드리프트 검사 (전반부 vs 후반부 평균 차이 — 각 반쪽 std 기준)
-    mid = len(arr) // 2
-    if mid > 0:
-        half_std = (float(np.std(arr[:mid])) + float(np.std(arr[mid:]))) / 2 + 1e-9
-        drift_score = abs(float(np.mean(arr[mid:])) - float(np.mean(arr[:mid]))) / half_std
-    else:
-        drift_score = 0.0
+    mid = len(arr) // 2  # len(arr) >= 2 이므로 mid >= 1 보장
+    half_std = (float(np.std(arr[:mid])) + float(np.std(arr[mid:]))) / 2 + 1e-9
+    drift_score = abs(float(np.mean(arr[mid:])) - float(np.mean(arr[:mid]))) / half_std
 
     if drift_score > DRIFT_THRESHOLD:
         return DetectionResult(
