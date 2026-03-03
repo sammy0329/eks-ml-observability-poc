@@ -118,9 +118,9 @@ flowchart TD
 ### Task 1.2.6: Dockerfile 작성
 - **설명**: 추론 서비스용 멀티스테이지 Dockerfile을 작성한다. 빌드 스테이지에서 의존성 설치, 런타임 스테이지에서 `python:3.12-slim` 기반 최소 이미지 구성.
 - **DoD (완료 정의)**:
-  - [ ] `docker build -t inference-api .` 성공 (Docker 데몬 실행 후 검증 예정)
-  - [ ] `docker run` 후 `/healthz` 200 OK
-  - [ ] 최종 이미지 크기 200MB 이하
+  - [x] `docker build -t inference-api .` 성공
+  - [x] `docker run` 후 `/healthz` 200 OK
+  - [ ] 최종 이미지 크기 200MB 이하 (실제 352MB — numpy/scipy 포함으로 PoC 범위에서 허용)
   - [x] 비root 사용자로 실행
 - **산출물/캡처 포인트**: `docker images` 출력 (이미지 크기)
 - **예상 소요**: 0.5h
@@ -176,9 +176,9 @@ flowchart TD
 ### Task 2.1.4: 생성기 Dockerfile 작성
 - **설명**: 합성 센서 생성기를 컨테이너로 빌드할 수 있도록 Dockerfile을 작성한다.
 - **DoD (완료 정의)**:
-  - [ ] `docker build -t sensor-generator .` 성공 (Docker 데몬 실행 후 검증 예정)
+  - [x] `docker build -t sensor-generator .` 성공
   - [x] 환경 변수로 타겟 URL, 프로파일 지정 가능
-  - [ ] `docker run` 시 추론 서비스로 요청 전송 확인 (docker-compose Task 2.2.2에서 검증)
+  - [x] `docker run` 시 추론 서비스로 요청 전송 확인
 - **산출물/캡처 포인트**: `docker images` 출력
 - **예상 소요**: 0.5h
 
