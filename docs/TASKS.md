@@ -215,30 +215,30 @@ flowchart TD
 ### Task 3.1.1: Prometheus 스크랩 설정
 - **설명**: Prometheus 설정 파일(`prometheus.yml`)을 작성하여 추론 서비스의 `/metrics` 엔드포인트를 스크랩 타겟으로 등록한다. 스크랩 간격 15초.
 - **DoD (완료 정의)**:
-  - [ ] `prometheus.yml` 파일 생성
-  - [ ] Prometheus UI > Targets에서 추론 서비스 `UP` 상태
-  - [ ] Prometheus UI > Graph에서 `request_count` 쿼리 결과 존재
-  - [ ] 도메인 메트릭(`input_missing_rate` 등) 쿼리 가능
+  - [x] `prometheus.yml` 파일 생성
+  - [x] Prometheus UI > Targets에서 추론 서비스 `UP` 상태
+  - [x] Prometheus UI > Graph에서 `request_count` 쿼리 결과 존재
+  - [x] 도메인 메트릭(`input_missing_rate` 등) 쿼리 가능
 - **산출물/캡처 포인트**: Prometheus Targets 페이지 스크린샷
 - **예상 소요**: 0.5h
 
 ### Task 3.1.2: Alerting Rules 정의
 - **설명**: Prometheus alerting rules 파일(`alerting_rules.yml`)을 작성한다. 최소 3개 알람: (1) error rate > 1% (5m), (2) p95 latency > 200ms (5m), (3) input_missing_rate > 0.3 (5m).
 - **DoD (완료 정의)**:
-  - [ ] `alerting_rules.yml` 파일 생성
-  - [ ] Prometheus UI > Alerts에서 3개 룰 표시
-  - [ ] 모든 룰이 `inactive` 상태 (정상 시)
-  - [ ] PromQL 표현식 문법 오류 없음
+  - [x] `alerting_rules.yml` 파일 생성
+  - [x] Prometheus UI > Alerts에서 3개 룰 표시
+  - [x] 모든 룰이 `inactive` 상태 (정상 시)
+  - [x] PromQL 표현식 문법 오류 없음
 - **산출물/캡처 포인트**: Prometheus Alerts 페이지 스크린샷
 - **예상 소요**: 1h
 
 ### Task 3.1.3: Alertmanager 설정 및 연동
 - **설명**: Alertmanager 설정 파일(`alertmanager.yml`)을 작성한다. 웹훅 수신기(webhook receiver)를 기본으로 설정한다. Prometheus가 Alertmanager에 알람을 전송하도록 연동한다.
 - **DoD (완료 정의)**:
-  - [ ] `alertmanager.yml` 파일 생성
-  - [ ] Prometheus 설정에 alertmanager 타겟 등록
-  - [ ] Alertmanager UI (`localhost:9093`) 접근 가능
-  - [ ] 의도적 에러 주입 시 Alertmanager에 알람 표시
+  - [x] `alertmanager.yml` 파일 생성
+  - [x] Prometheus 설정에 alertmanager 타겟 등록
+  - [x] Alertmanager UI (`localhost:9093`) 접근 가능
+  - [ ] 의도적 에러 주입 시 Alertmanager에 알람 표시 (Epic 3.4 통합 테스트에서 검증)
 - **산출물/캡처 포인트**: Alertmanager UI에서 알람 발생 스크린샷
 - **예상 소요**: 1h
 

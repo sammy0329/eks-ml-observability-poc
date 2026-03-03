@@ -53,3 +53,31 @@ class TestComposeStructure:
             assert "inference-api" in depends
         else:
             assert "inference-api" in depends
+
+    def test_prometheus_service_defined(self):
+        cfg = load_compose()
+        assert "prometheus" in cfg["services"]
+
+    def test_prometheus_port_9090(self):
+        cfg = load_compose()
+        ports = cfg["services"]["prometheus"].get("ports", [])
+        assert any("9090" in str(p) for p in ports)
+
+    def test_prometheus_mounts_config(self):
+        cfg = load_compose()
+        volumes = cfg["services"]["prometheus"].get("volumes", [])
+        assert any("prometheus.yml" in str(v) for v in volumes)
+
+    def test_alertmanager_service_defined(self):
+        cfg = load_compose()
+        assert "alertmanager" in cfg["services"]
+
+    def test_alertmanager_port_9093(self):
+        cfg = load_compose()
+        ports = cfg["services"]["alertmanager"].get("ports", [])
+        assert any("9093" in str(p) for p in ports)
+
+    def test_alertmanager_mounts_config(self):
+        cfg = load_compose()
+        volumes = cfg["services"]["alertmanager"].get("volumes", [])
+        assert any("alertmanager.yml" in str(v) for v in volumes)
