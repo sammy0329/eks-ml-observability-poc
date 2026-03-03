@@ -69,69 +69,69 @@ flowchart TD
 ### Task 1.2.1: FastAPI 앱 스켈레톤 및 /healthz 엔드포인트
 - **설명**: FastAPI 앱의 기본 구조를 생성한다. `app/main.py`에 앱 인스턴스를 생성하고, `GET /healthz` 엔드포인트를 구현하여 `{"status": "ok"}` 를 반환한다.
 - **DoD (완료 정의)**:
-  - [ ] `uvicorn app.main:app --reload` 실행 성공
-  - [ ] `GET /healthz` 가 200 OK + `{"status": "ok"}` 반환
-  - [ ] `GET /docs` 에서 Swagger UI 접근 가능
+  - [x] `uvicorn app.main:app --reload` 실행 성공
+  - [x] `GET /healthz` 가 200 OK + `{"status": "ok"}` 반환
+  - [x] `GET /docs` 에서 Swagger UI 접근 가능
 - **산출물/캡처 포인트**: `/healthz` curl 응답 캡처
 - **예상 소요**: 0.5h
 
 ### Task 1.2.2: 입출력 스키마 정의 (Pydantic 모델)
 - **설명**: `/predict` 엔드포인트의 요청/응답 Pydantic 모델을 정의한다. 요청: `sensor_id (str)`, `timestamp (datetime)`, `values (list[float])`, `missing_flags (list[bool], optional)`. 응답: `anomaly_score (float)`, `is_anomaly (bool)`, `reason (str)`.
 - **DoD (완료 정의)**:
-  - [ ] `app/schemas.py` 에 PredictRequest, PredictResponse 모델 정의
-  - [ ] Pydantic 유효성 검증 동작 확인 (잘못된 타입 입력 시 422 반환)
-  - [ ] 빈 values 배열에 대한 검증 규칙 존재
+  - [x] `app/schemas.py` 에 PredictRequest, PredictResponse 모델 정의
+  - [x] Pydantic 유효성 검증 동작 확인 (잘못된 타입 입력 시 422 반환)
+  - [x] 빈 values 배열에 대한 검증 규칙 존재
 - **산출물/캡처 포인트**: 스키마 코드 및 422 에러 응답 예시
 - **예상 소요**: 0.5h
 
 ### Task 1.2.3: 이상 탐지 로직 구현 (Z-score 기반)
 - **설명**: `app/detector.py`에 경량 통계 기반 이상 탐지 로직을 구현한다. Z-score 방식으로 window 내 값의 이상 여부를 판단한다. 임계값(threshold)은 설정 가능하게 한다. 결측률(missing_rate)과 분산 변화(drift_score)도 계산한다.
 - **DoD (완료 정의)**:
-  - [ ] `detect_anomaly(values, missing_flags)` 함수 구현
-  - [ ] 정상 데이터 입력 시 `is_anomaly=False` 반환
-  - [ ] 스파이크 데이터 입력 시 `is_anomaly=True`, `reason="variance_spike"` 반환
-  - [ ] 결측률 높은 입력 시 `reason="missing_rate_high"` 반환
-  - [ ] 단위 테스트 3개 이상 통과
+  - [x] `detect_anomaly(values, missing_flags)` 함수 구현
+  - [x] 정상 데이터 입력 시 `is_anomaly=False` 반환
+  - [x] 스파이크 데이터 입력 시 `is_anomaly=True`, `reason="variance_spike"` 반환
+  - [x] 결측률 높은 입력 시 `reason="missing_rate_high"` 반환
+  - [x] 단위 테스트 3개 이상 통과
 - **산출물/캡처 포인트**: 탐지 로직 코드 및 테스트 결과
 - **예상 소요**: 1.5h
 
 ### Task 1.2.4: POST /predict 엔드포인트 구현
 - **설명**: `/predict` 엔드포인트를 구현하여 PredictRequest를 받고, 이상 탐지 로직을 호출한 뒤, PredictResponse를 반환한다. 처리 시간을 측정하여 로깅한다.
 - **DoD (완료 정의)**:
-  - [ ] `POST /predict` 가 정상 요청에 대해 200 + PredictResponse 반환
-  - [ ] 잘못된 요청에 대해 422 반환
-  - [ ] 처리 시간 로그 출력
-  - [ ] Swagger UI에서 인터랙티브 테스트 가능
+  - [x] `POST /predict` 가 정상 요청에 대해 200 + PredictResponse 반환
+  - [x] 잘못된 요청에 대해 422 반환
+  - [x] 처리 시간 로그 출력
+  - [x] Swagger UI에서 인터랙티브 테스트 가능
 - **산출물/캡처 포인트**: `/predict` 정상/이상 요청 curl 응답 캡처
 - **예상 소요**: 1h
 
 ### Task 1.2.5: Prometheus 메트릭 계측 (RED 메트릭)
 - **설명**: `prometheus-client`를 사용하여 HTTP RED 메트릭을 계측한다. `request_count` (Counter, labels: method, endpoint, status), `request_latency_seconds` (Histogram, labels: endpoint). `/metrics` 엔드포인트를 노출한다.
 - **DoD (완료 정의)**:
-  - [ ] `GET /metrics` 가 Prometheus exposition format 텍스트 반환
-  - [ ] `/predict` 호출 후 `request_count` 증가 확인
-  - [ ] `/predict` 호출 후 `request_latency_seconds` 히스토그램 버킷에 값 존재
-  - [ ] `app_version` info gauge 노출
+  - [x] `GET /metrics` 가 Prometheus exposition format 텍스트 반환
+  - [x] `/predict` 호출 후 `request_count` 증가 확인
+  - [x] `/predict` 호출 후 `request_latency_seconds` 히스토그램 버킷에 값 존재
+  - [x] `app_version` info gauge 노출
 - **산출물/캡처 포인트**: `/metrics` 응답 일부 캡처
 - **예상 소요**: 1h
 
 ### Task 1.2.6: Dockerfile 작성
 - **설명**: 추론 서비스용 멀티스테이지 Dockerfile을 작성한다. 빌드 스테이지에서 의존성 설치, 런타임 스테이지에서 `python:3.12-slim` 기반 최소 이미지 구성.
 - **DoD (완료 정의)**:
-  - [ ] `docker build -t inference-api .` 성공
+  - [ ] `docker build -t inference-api .` 성공 (Docker 데몬 실행 후 검증 예정)
   - [ ] `docker run` 후 `/healthz` 200 OK
   - [ ] 최종 이미지 크기 200MB 이하
-  - [ ] 비root 사용자로 실행
+  - [x] 비root 사용자로 실행
 - **산출물/캡처 포인트**: `docker images` 출력 (이미지 크기)
 - **예상 소요**: 0.5h
 
 ### Task 1.2.7: 단위 테스트 작성
 - **설명**: pytest를 사용하여 추론 서비스의 단위/통합 테스트를 작성한다. 이상 탐지 로직 테스트, API 엔드포인트 테스트를 포함한다.
 - **DoD (완료 정의)**:
-  - [ ] 이상 탐지 로직 테스트: 정상, 스파이크, 결측, 드리프트 각 1개 이상
-  - [ ] API 엔드포인트 테스트: /healthz, /predict 정상, /predict 에러 각 1개 이상
-  - [ ] `pytest -v` 전체 통과 (최소 7개 테스트)
-  - [ ] 테스트 커버리지 핵심 로직 80% 이상
+  - [x] 이상 탐지 로직 테스트: 정상, 스파이크, 결측, 드리프트 각 1개 이상
+  - [x] API 엔드포인트 테스트: /healthz, /predict 정상, /predict 에러 각 1개 이상
+  - [x] `pytest -v` 전체 통과 (27개 테스트)
+  - [x] 테스트 커버리지 핵심 로직 80% 이상 (100% 달성)
 - **산출물/캡처 포인트**: `pytest -v` 출력 캡처
 - **예상 소요**: 1h
 
