@@ -46,19 +46,19 @@ flowchart TD
 ### Task 1.1.1: 프로젝트 디렉토리 구조 생성
 - **설명**: 모노레포 형태의 프로젝트 디렉토리 구조를 확정하고 생성한다. `inference-api/`, `sensor-generator/`, `observability/`, `k8s/`, `infra/`, `scripts/`, `docs/` 디렉토리를 포함한다.
 - **DoD (완료 정의)**:
-  - [ ] 디렉토리 구조가 README.md에 문서화됨
-  - [ ] .gitignore 파일 생성 (Python, Docker, IDE 패턴 포함)
-  - [ ] 각 서브 디렉토리에 빈 __init__.py 또는 .gitkeep 존재
+  - [x] 디렉토리 구조가 README.md에 문서화됨
+  - [x] .gitignore 파일 생성 (Python, Docker, IDE 패턴 포함)
+  - [x] 각 서브 디렉토리에 빈 __init__.py 또는 .gitkeep 존재
 - **산출물/캡처 포인트**: 프로젝트 루트의 `tree` 명령 출력 캡처
 - **예상 소요**: 0.5h
 
 ### Task 1.1.2: Python 개발 환경 설정
 - **설명**: uv를 사용하여 inference-api 프로젝트의 Python 환경을 구성한다. FastAPI, uvicorn, numpy, scipy, prometheus-client, pytest, httpx, ruff 등 의존성을 정의한다.
 - **DoD (완료 정의)**:
-  - [ ] `pyproject.toml` 파일 생성 (모든 의존성 명시)
-  - [ ] `uv sync` 성공
-  - [ ] `ruff check .` 실행 가능
-  - [ ] `pytest --version` 실행 가능
+  - [x] `pyproject.toml` 파일 생성 (모든 의존성 명시)
+  - [x] `uv sync` 성공
+  - [x] `ruff check .` 실행 가능
+  - [x] `pytest --version` 실행 가능
 - **산출물/캡처 포인트**: `pyproject.toml` 파일 내용
 - **예상 소요**: 0.5h
 

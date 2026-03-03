@@ -1,7 +1,8 @@
 # Skill: branch
 
 ## Description
-`docs/TASKS.md`의 Task ID와 설명을 받아 프로젝트 git-flow 규칙에 맞는 브랜치를 생성하고 checkout한다.
+`docs/TASKS.md`의 Epic ID와 설명을 받아 프로젝트 git-flow 규칙에 맞는 브랜치를 생성하고 checkout한다.
+브랜치 단위는 **Epic** (Task X 커밋으로 추적).
 
 ## Triggers
 - `/branch`
@@ -9,7 +10,7 @@
 
 ## Usage
 ```
-/branch <task-id> <설명>
+/branch <epic-id> <설명>
 /branch hotfix <설명>
 /branch docs <설명>
 ```
@@ -28,11 +29,11 @@ git checkout main && git pull origin main
 
 | 입력 | 브랜치 패턴 |
 |------|------------|
-| `<task-id> <설명>` | `feature/phase{N}/{task-id}-{kebab-desc}` |
+| `<epic-id> <설명>` | `feature/phase{N}/epic{N}.{M}-{kebab-desc}` |
 | `hotfix <설명>` | `hotfix/{kebab-desc}` |
 | `docs <설명>` | `docs/{kebab-desc}` |
 
-- task-id 첫 번째 숫자 = Phase 번호 (`1.2.3` → `phase1`)
+- epic-id 첫 번째 숫자 = Phase 번호 (`1.2` → `phase1`, `epic1.2`)
 - 설명은 kebab-case 변환 (공백 → `-`, 소문자, 특수문자 제거)
 - 최대 60자 제한
 
@@ -42,16 +43,16 @@ git checkout -b {브랜치명}
 ```
 
 ### 5. 결과 출력
-생성된 브랜치명, 관련 Task 요약(`docs/TASKS.md` 참조), 다음 단계 안내를 출력한다.
+생성된 브랜치명, Epic에 포함된 Task 목록(`docs/TASKS.md` 참조), 다음 단계 안내를 출력한다.
 
 ## Examples
 
 ```
-/branch 1.2.3 이상 탐지 로직 구현
-→ feature/phase1/1.2.3-이상-탐지-로직-구현
+/branch 1.2 FastAPI 추론 서비스
+→ feature/phase1/epic1.2-fastapi-추론-서비스
 
-/branch 3.2.2 grafana dashboard json
-→ feature/phase3/3.2.2-grafana-dashboard-json
+/branch 3.2 grafana 대시보드
+→ feature/phase3/epic3.2-grafana-대시보드
 
 /branch hotfix HPA metrics-server 미설치 오류
 → hotfix/hpa-metrics-server-미설치-오류
