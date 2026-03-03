@@ -1,0 +1,9 @@
+name: error
+description: "에러 유발 (S2) — 잘못된 입력 30%로 error rate 상승"
+rps: 10
+window_size: 30
+anomaly_type: normal
+missing_rate: 0.0
+spike_magnitude: 0.0
+drift_rate: 0.0
+error_ratio: 0.3       # 30% 요청에 빈 values 전송 → 422 에러 유발

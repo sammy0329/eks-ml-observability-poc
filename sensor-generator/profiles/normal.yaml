@@ -1,0 +1,9 @@
+name: normal
+description: "정상 트래픽 — 낮은 RPS, 이상 없음"
+rps: 10
+window_size: 30
+anomaly_type: normal   # normal | spike | drift | missing
+missing_rate: 0.0
+spike_magnitude: 0.0
+drift_rate: 0.0
+error_ratio: 0.0       # 의도적 잘못된 요청 비율

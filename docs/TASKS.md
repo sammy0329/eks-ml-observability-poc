@@ -144,41 +144,41 @@ flowchart TD
 ### Task 2.1.1: 시계열 데이터 생성 엔진
 - **설명**: numpy를 사용하여 합성 센서 시계열 데이터를 생성하는 엔진을 구현한다. 기본 패턴(사인파 + 노이즈)에 이상 패턴(스파이크, 드리프트, 결측, 노이즈 증가)을 파라미터 기반으로 주입한다.
 - **DoD (완료 정의)**:
-  - [ ] `generate_normal(window_size)` : 정상 시계열 반환
-  - [ ] `generate_spike(window_size, spike_magnitude)` : 스파이크 포함 시계열 반환
-  - [ ] `generate_drift(window_size, drift_rate)` : 드리프트 포함 시계열 반환
-  - [ ] `generate_missing(window_size, missing_rate)` : NaN/결측 포함 시계열 반환
-  - [ ] 단위 테스트 4개 이상 통과
+  - [x] `generate_normal(window_size)` : 정상 시계열 반환
+  - [x] `generate_spike(window_size, spike_magnitude)` : 스파이크 포함 시계열 반환
+  - [x] `generate_drift(window_size, drift_rate)` : 드리프트 포함 시계열 반환
+  - [x] `generate_missing(window_size, missing_rate)` : NaN/결측 포함 시계열 반환
+  - [x] 단위 테스트 4개 이상 통과 (16개)
 - **산출물/캡처 포인트**: 생성된 시계열 데이터 샘플 출력 (정상 vs 이상)
 - **예상 소요**: 1.5h
 
 ### Task 2.1.2: HTTP 스트림 클라이언트 구현
 - **설명**: httpx async 클라이언트를 사용하여 생성된 시계열 데이터를 추론 서비스 `/predict` 엔드포인트에 전송하는 스트리밍 클라이언트를 구현한다. RPS(초당 요청 수)를 조절 가능하게 한다.
 - **DoD (완료 정의)**:
-  - [ ] 지정된 RPS로 `/predict` 에 요청 전송
-  - [ ] 응답 로깅 (anomaly_score, is_anomaly)
-  - [ ] 에러 발생 시 재시도 로직 (최대 2회)
-  - [ ] 타임아웃 설정 (3초)
+  - [x] 지정된 RPS로 `/predict` 에 요청 전송
+  - [x] 응답 로깅 (anomaly_score, is_anomaly)
+  - [x] 에러 발생 시 재시도 로직 (최대 2회)
+  - [x] 타임아웃 설정 (3초)
 - **산출물/캡처 포인트**: 클라이언트 실행 시 콘솔 로그 캡처
 - **예상 소요**: 1h
 
 ### Task 2.1.3: 시나리오 프로파일 정의 및 CLI
 - **설명**: S1(부하), S2(에러), S3(품질 저하) 시나리오에 대응하는 생성기 프로파일을 YAML 파일로 정의한다. typer CLI를 통해 `--profile` 옵션으로 프로파일을 선택할 수 있게 한다.
 - **DoD (완료 정의)**:
-  - [ ] `profiles/normal.yaml` : 정상 트래픽 (10 RPS, 이상 0%)
-  - [ ] `profiles/load.yaml` : 부하 트래픽 (50-100 RPS, 이상 5%)
-  - [ ] `profiles/error.yaml` : 에러 유발 (잘못된 입력 30%)
-  - [ ] `profiles/quality_degradation.yaml` : 결측 40%, 드리프트, 지연
-  - [ ] CLI `python -m sensor_generator --profile normal` 실행 가능
+  - [x] `profiles/normal.yaml` : 정상 트래픽 (10 RPS, 이상 0%)
+  - [x] `profiles/load.yaml` : 부하 트래픽 (50-100 RPS, 이상 5%)
+  - [x] `profiles/error.yaml` : 에러 유발 (잘못된 입력 30%)
+  - [x] `profiles/quality_degradation.yaml` : 결측 40%, 드리프트, 지연
+  - [x] CLI `python -m sensor_generator --profile normal` 실행 가능
 - **산출물/캡처 포인트**: 각 프로파일 YAML 내용 및 CLI `--help` 출력
 - **예상 소요**: 1h
 
 ### Task 2.1.4: 생성기 Dockerfile 작성
 - **설명**: 합성 센서 생성기를 컨테이너로 빌드할 수 있도록 Dockerfile을 작성한다.
 - **DoD (완료 정의)**:
-  - [ ] `docker build -t sensor-generator .` 성공
-  - [ ] 환경 변수로 타겟 URL, 프로파일 지정 가능
-  - [ ] `docker run` 시 추론 서비스로 요청 전송 확인
+  - [ ] `docker build -t sensor-generator .` 성공 (Docker 데몬 실행 후 검증 예정)
+  - [x] 환경 변수로 타겟 URL, 프로파일 지정 가능
+  - [ ] `docker run` 시 추론 서비스로 요청 전송 확인 (docker-compose Task 2.2.2에서 검증)
 - **산출물/캡처 포인트**: `docker images` 출력
 - **예상 소요**: 0.5h
 
