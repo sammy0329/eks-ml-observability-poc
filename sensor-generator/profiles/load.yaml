@@ -1,0 +1,9 @@
+name: load
+description: "부하 트래픽 (S1) — 고RPS, 간헐적 스파이크"
+rps: 50
+window_size: 30
+anomaly_type: spike
+missing_rate: 0.02
+spike_magnitude: 10.0
+drift_rate: 0.0
+error_ratio: 0.0

@@ -1,0 +1,10 @@
+name: quality_degradation
+description: "입력 품질 저하 (S3) — 결측 40% + 드리프트 + 지연"
+rps: 10
+window_size: 30
+anomaly_type: drift
+missing_rate: 0.4
+spike_magnitude: 0.0
+drift_rate: 3.0
+error_ratio: 0.0
+delay_ms: 500          # 요청당 추가 지연 (ms)
