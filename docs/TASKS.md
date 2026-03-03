@@ -189,17 +189,17 @@ flowchart TD
 ### Task 2.2.1: 도메인 메트릭 계측 추가
 - **설명**: 추론 서비스에 도메인 메트릭을 추가한다. `input_missing_rate` (Gauge), `input_delay_ms` (Histogram), `drift_score` (Gauge), `anomaly_rate` (Gauge). 각 `/predict` 요청 처리 시 메트릭을 업데이트한다.
 - **DoD (완료 정의)**:
-  - [ ] `/metrics`에 `input_missing_rate`, `input_delay_ms`, `drift_score`, `anomaly_rate` 4개 메트릭 노출
-  - [ ] 결측 데이터 요청 시 `input_missing_rate` 값 상승 확인
-  - [ ] 정상 요청 시 `anomaly_rate` 낮은 값 유지 확인
-  - [ ] 모든 메트릭에 `sensor_id` 라벨 포함
+  - [x] `/metrics`에 `input_missing_rate`, `input_delay_ms`, `drift_score`, `anomaly_rate` 4개 메트릭 노출
+  - [x] 결측 데이터 요청 시 `input_missing_rate` 값 상승 확인
+  - [x] 정상 요청 시 `anomaly_rate` 낮은 값 유지 확인
+  - [x] 모든 메트릭에 `sensor_id` 라벨 포함
 - **산출물/캡처 포인트**: `/metrics` 엔드포인트에서 도메인 메트릭 노출 확인 캡처
 - **예상 소요**: 1h
 
 ### Task 2.2.2: docker-compose 기본 구성 (추론 API + 생성기)
 - **설명**: docker-compose.yml에 추론 서비스와 생성기 두 서비스를 정의한다. 네트워크로 연결하여 생성기가 추론 서비스에 요청을 전송하도록 구성한다.
 - **DoD (완료 정의)**:
-  - [ ] `docker-compose up` 으로 두 서비스 동시 기동
+  - [ ] `docker-compose up` 으로 두 서비스 동시 기동 (Docker 데몬 실행 후 검증 예정)
   - [ ] 생성기 로그에 추론 서비스 응답 출력
   - [ ] 추론 서비스 `/metrics`에 요청 카운트 증가
   - [ ] `docker-compose down` 으로 정상 종료
