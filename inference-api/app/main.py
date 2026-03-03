@@ -6,7 +6,14 @@ from fastapi.responses import Response
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 from app.detector import detect_anomaly
-from app.metrics import REQUEST_COUNT, REQUEST_LATENCY
+from app.metrics import (
+    ANOMALY_RATE,
+    DRIFT_SCORE,
+    INPUT_DELAY_MS,
+    INPUT_MISSING_RATE,
+    REQUEST_COUNT,
+    REQUEST_LATENCY,
+)
 from app.schemas import PredictRequest, PredictResponse
 
 logger = logging.getLogger(__name__)
@@ -64,6 +71,11 @@ async def predict(request: PredictRequest):
         result.reason,
         duration_ms,
     )
+
+    INPUT_MISSING_RATE.labels(sensor_id=request.sensor_id).set(result.missing_rate)
+    INPUT_DELAY_MS.labels(sensor_id=request.sensor_id).observe(duration_ms)
+    DRIFT_SCORE.labels(sensor_id=request.sensor_id).set(result.drift_score)
+    ANOMALY_RATE.labels(sensor_id=request.sensor_id).set(1.0 if result.is_anomaly else 0.0)
 
     return PredictResponse(
         anomaly_score=result.anomaly_score,
