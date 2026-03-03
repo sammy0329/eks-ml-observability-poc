@@ -55,10 +55,10 @@ flowchart TD
 ### Task 1.1.2: Python 개발 환경 설정
 - **설명**: uv를 사용하여 inference-api 프로젝트의 Python 환경을 구성한다. FastAPI, uvicorn, numpy, scipy, prometheus-client, pytest, httpx, ruff 등 의존성을 정의한다.
 - **DoD (완료 정의)**:
-  - [ ] `pyproject.toml` 파일 생성 (모든 의존성 명시)
-  - [ ] `uv sync` 성공
-  - [ ] `ruff check .` 실행 가능
-  - [ ] `pytest --version` 실행 가능
+  - [x] `pyproject.toml` 파일 생성 (모든 의존성 명시)
+  - [x] `uv sync` 성공
+  - [x] `ruff check .` 실행 가능
+  - [x] `pytest --version` 실행 가능
 - **산출물/캡처 포인트**: `pyproject.toml` 파일 내용
 - **예상 소요**: 0.5h
 

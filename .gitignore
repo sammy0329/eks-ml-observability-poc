@@ -22,7 +22,6 @@ env/
 
 # uv
 .python-version
-uv.lock
 
 # Docker
 .dockerignore
