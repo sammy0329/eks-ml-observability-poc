@@ -45,3 +45,6 @@ logs/
 # Temporary
 *.tmp
 *.bak
+
+# Local notes (not for git)
+notes/
