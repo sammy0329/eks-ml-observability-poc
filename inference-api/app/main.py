@@ -2,7 +2,8 @@ import logging
 import time
 
 from fastapi import FastAPI, Request
-from prometheus_client import make_asgi_app
+from fastapi.responses import Response
+from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 from app.detector import detect_anomaly
 from app.metrics import REQUEST_COUNT, REQUEST_LATENCY
@@ -16,8 +17,6 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# Prometheus 메트릭 엔드포인트 마운트
-app.mount("/metrics", make_asgi_app())
 
 
 @app.middleware("http")
@@ -35,6 +34,11 @@ async def metrics_middleware(request: Request, call_next):
     REQUEST_LATENCY.labels(endpoint=endpoint).observe(duration)
 
     return response
+
+
+@app.get("/metrics", include_in_schema=False)
+def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
 @app.get("/healthz")
