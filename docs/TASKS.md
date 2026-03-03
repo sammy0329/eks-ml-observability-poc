@@ -118,9 +118,9 @@ flowchart TD
 ### Task 1.2.6: Dockerfile 작성
 - **설명**: 추론 서비스용 멀티스테이지 Dockerfile을 작성한다. 빌드 스테이지에서 의존성 설치, 런타임 스테이지에서 `python:3.12-slim` 기반 최소 이미지 구성.
 - **DoD (완료 정의)**:
-  - [ ] `docker build -t inference-api .` 성공 (Docker 데몬 실행 후 검증 예정)
-  - [ ] `docker run` 후 `/healthz` 200 OK
-  - [ ] 최종 이미지 크기 200MB 이하
+  - [x] `docker build -t inference-api .` 성공
+  - [x] `docker run` 후 `/healthz` 200 OK
+  - [ ] 최종 이미지 크기 200MB 이하 (실제 352MB — numpy/scipy 포함으로 PoC 범위에서 허용)
   - [x] 비root 사용자로 실행
 - **산출물/캡처 포인트**: `docker images` 출력 (이미지 크기)
 - **예상 소요**: 0.5h
@@ -176,9 +176,9 @@ flowchart TD
 ### Task 2.1.4: 생성기 Dockerfile 작성
 - **설명**: 합성 센서 생성기를 컨테이너로 빌드할 수 있도록 Dockerfile을 작성한다.
 - **DoD (완료 정의)**:
-  - [ ] `docker build -t sensor-generator .` 성공 (Docker 데몬 실행 후 검증 예정)
+  - [x] `docker build -t sensor-generator .` 성공
   - [x] 환경 변수로 타겟 URL, 프로파일 지정 가능
-  - [ ] `docker run` 시 추론 서비스로 요청 전송 확인 (docker-compose Task 2.2.2에서 검증)
+  - [x] `docker run` 시 추론 서비스로 요청 전송 확인
 - **산출물/캡처 포인트**: `docker images` 출력
 - **예상 소요**: 0.5h
 
@@ -189,20 +189,20 @@ flowchart TD
 ### Task 2.2.1: 도메인 메트릭 계측 추가
 - **설명**: 추론 서비스에 도메인 메트릭을 추가한다. `input_missing_rate` (Gauge), `input_delay_ms` (Histogram), `drift_score` (Gauge), `anomaly_rate` (Gauge). 각 `/predict` 요청 처리 시 메트릭을 업데이트한다.
 - **DoD (완료 정의)**:
-  - [ ] `/metrics`에 `input_missing_rate`, `input_delay_ms`, `drift_score`, `anomaly_rate` 4개 메트릭 노출
-  - [ ] 결측 데이터 요청 시 `input_missing_rate` 값 상승 확인
-  - [ ] 정상 요청 시 `anomaly_rate` 낮은 값 유지 확인
-  - [ ] 모든 메트릭에 `sensor_id` 라벨 포함
+  - [x] `/metrics`에 `input_missing_rate`, `input_delay_ms`, `drift_score`, `anomaly_rate` 4개 메트릭 노출
+  - [x] 결측 데이터 요청 시 `input_missing_rate` 값 상승 확인
+  - [x] 정상 요청 시 `anomaly_rate` 낮은 값 유지 확인
+  - [x] 모든 메트릭에 `sensor_id` 라벨 포함
 - **산출물/캡처 포인트**: `/metrics` 엔드포인트에서 도메인 메트릭 노출 확인 캡처
 - **예상 소요**: 1h
 
 ### Task 2.2.2: docker-compose 기본 구성 (추론 API + 생성기)
 - **설명**: docker-compose.yml에 추론 서비스와 생성기 두 서비스를 정의한다. 네트워크로 연결하여 생성기가 추론 서비스에 요청을 전송하도록 구성한다.
 - **DoD (완료 정의)**:
-  - [ ] `docker-compose up` 으로 두 서비스 동시 기동
-  - [ ] 생성기 로그에 추론 서비스 응답 출력
-  - [ ] 추론 서비스 `/metrics`에 요청 카운트 증가
-  - [ ] `docker-compose down` 으로 정상 종료
+  - [x] `docker-compose up` 으로 두 서비스 동시 기동
+  - [x] 생성기 로그에 추론 서비스 응답 출력
+  - [x] 추론 서비스 `/metrics`에 요청 카운트 증가
+  - [x] `docker-compose down` 으로 정상 종료
 - **산출물/캡처 포인트**: `docker-compose up` 로그 캡처 (두 서비스 상호 작용)
 - **예상 소요**: 1h
 

@@ -1,0 +1,26 @@
+services:
+  inference-api:
+    build:
+      context: ./inference-api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  sensor-generator:
+    build:
+      context: ./sensor-generator
+      dockerfile: Dockerfile
+    environment:
+      TARGET_URL: http://inference-api:8000
+      PROFILE: normal
+      SENSOR_ID: sensor-compose-01
+    depends_on:
+      inference-api:
+        condition: service_healthy
+    restart: on-failure
