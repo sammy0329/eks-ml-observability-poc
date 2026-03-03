@@ -199,10 +199,10 @@ flowchart TD
 ### Task 2.2.2: docker-compose 기본 구성 (추론 API + 생성기)
 - **설명**: docker-compose.yml에 추론 서비스와 생성기 두 서비스를 정의한다. 네트워크로 연결하여 생성기가 추론 서비스에 요청을 전송하도록 구성한다.
 - **DoD (완료 정의)**:
-  - [ ] `docker-compose up` 으로 두 서비스 동시 기동 (Docker 데몬 실행 후 검증 예정)
-  - [ ] 생성기 로그에 추론 서비스 응답 출력
-  - [ ] 추론 서비스 `/metrics`에 요청 카운트 증가
-  - [ ] `docker-compose down` 으로 정상 종료
+  - [x] `docker-compose up` 으로 두 서비스 동시 기동
+  - [x] 생성기 로그에 추론 서비스 응답 출력
+  - [x] 추론 서비스 `/metrics`에 요청 카운트 증가
+  - [x] `docker-compose down` 으로 정상 종료
 - **산출물/캡처 포인트**: `docker-compose up` 로그 캡처 (두 서비스 상호 작용)
 - **예상 소요**: 1h
 
