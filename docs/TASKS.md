@@ -46,9 +46,9 @@ flowchart TD
 ### Task 1.1.1: 프로젝트 디렉토리 구조 생성
 - **설명**: 모노레포 형태의 프로젝트 디렉토리 구조를 확정하고 생성한다. `inference-api/`, `sensor-generator/`, `observability/`, `k8s/`, `infra/`, `scripts/`, `docs/` 디렉토리를 포함한다.
 - **DoD (완료 정의)**:
-  - [ ] 디렉토리 구조가 README.md에 문서화됨
-  - [ ] .gitignore 파일 생성 (Python, Docker, IDE 패턴 포함)
-  - [ ] 각 서브 디렉토리에 빈 __init__.py 또는 .gitkeep 존재
+  - [x] 디렉토리 구조가 README.md에 문서화됨
+  - [x] .gitignore 파일 생성 (Python, Docker, IDE 패턴 포함)
+  - [x] 각 서브 디렉토리에 빈 __init__.py 또는 .gitkeep 존재
 - **산출물/캡처 포인트**: 프로젝트 루트의 `tree` 명령 출력 캡처
 - **예상 소요**: 0.5h
 
