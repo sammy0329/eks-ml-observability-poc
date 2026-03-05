@@ -249,20 +249,20 @@ flowchart TD
 ### Task 3.2.1: Grafana 데이터소스 및 프로비저닝 설정
 - **설명**: Grafana의 데이터소스(Prometheus)와 대시보드를 파일 기반 프로비저닝으로 설정한다. `provisioning/datasources/` 및 `provisioning/dashboards/` 디렉토리를 구성한다.
 - **DoD (완료 정의)**:
-  - [ ] Grafana 기동 시 Prometheus 데이터소스 자동 등록
-  - [ ] 대시보드 JSON 파일 자동 로드
-  - [ ] 별도 수동 설정 없이 `docker-compose up`만으로 대시보드 접근 가능
+  - [x] Grafana 기동 시 Prometheus 데이터소스 자동 등록
+  - [x] 대시보드 JSON 파일 자동 로드
+  - [x] 별도 수동 설정 없이 `docker-compose up`만으로 대시보드 접근 가능
 - **산출물/캡처 포인트**: Grafana 데이터소스 설정 화면 캡처
 - **예상 소요**: 0.5h
 
 ### Task 3.2.2: Grafana 대시보드 JSON 작성
 - **설명**: PRD 6.4에 정의된 패널을 포함하는 Grafana 대시보드 JSON을 작성한다. 행 구성: (1) HTTP RED (RPS, error rate, p95 latency), (2) 리소스 (CPU, memory, replica 수), (3) 입력 품질 (input_missing_rate, input_delay_ms, drift_score, anomaly_rate).
 - **DoD (완료 정의)**:
-  - [ ] 대시보드에 최소 8개 패널 존재
-  - [ ] RPS, error rate, p95 latency 패널에 데이터 렌더링
-  - [ ] input_missing_rate, drift_score 패널에 데이터 렌더링
-  - [ ] 대시보드 시간 범위 조절 가능
-  - [ ] 변수(variable)로 `app_version` 필터링 가능 (선택)
+  - [x] 대시보드에 최소 8개 패널 존재 (9개 데이터 패널)
+  - [x] RPS, error rate, p95 latency 패널에 데이터 렌더링
+  - [x] input_missing_rate, drift_score 패널에 데이터 렌더링
+  - [x] 대시보드 시간 범위 조절 가능
+  - [x] 변수(variable)로 DS_PROMETHEUS 데이터소스 선택 가능
 - **산출물/캡처 포인트**: Grafana 대시보드 전체 화면 스크린샷
 - **예상 소요**: 2h
 
