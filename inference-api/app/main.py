@@ -6,6 +6,7 @@ from fastapi.responses import Response
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 from app.detector import detect_anomaly
+from app.routers.events import router as events_router
 from app.metrics import (
     ANOMALY_RATE,
     DRIFT_SCORE,
@@ -23,6 +24,8 @@ app = FastAPI(
     description="EKS ML Observability PoC — FastAPI 추론 서비스",
     version="0.1.0",
 )
+
+app.include_router(events_router)
 
 
 

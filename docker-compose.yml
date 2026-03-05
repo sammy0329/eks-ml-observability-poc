@@ -1,10 +1,31 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: poc
+      POSTGRES_PASSWORD: poc
+      POSTGRES_DB: poc
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U poc -d poc"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
   inference-api:
     build:
       context: ./inference-api
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://poc:poc@postgres:5432/poc
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')\""]
       interval: 10s
