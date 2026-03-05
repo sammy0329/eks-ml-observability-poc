@@ -273,21 +273,21 @@ flowchart TD
 ### Task 3.3.1: PostgreSQL 스키마 및 초기화
 - **설명**: PostgreSQL에 운영 이벤트 테이블 3개(deployments, incidents, scenario_runs)를 생성한다. docker-compose에 PostgreSQL 서비스를 추가하고 초기화 SQL을 실행한다.
 - **DoD (완료 정의)**:
-  - [ ] `docker-compose up` 시 PostgreSQL 컨테이너 기동 + 테이블 자동 생성
-  - [ ] `psql`로 접속하여 3개 테이블 존재 확인
-  - [ ] 각 테이블에 INSERT + SELECT 수동 테스트 성공
-  - [ ] 테이블 스키마가 PRD 6.6 명세와 일치 (`deployments`, `incidents`, `scenario_runs`)
+  - [x] `docker-compose up` 시 PostgreSQL 컨테이너 기동 + 테이블 자동 생성
+  - [x] `psql`로 접속하여 3개 테이블 존재 확인
+  - [x] 각 테이블에 INSERT + SELECT 수동 테스트 성공
+  - [x] 테이블 스키마가 PRD 6.6 명세와 일치 (`deployments`, `incidents`, `scenario_runs`)
 - **산출물/캡처 포인트**: `\dt` 명령 출력 및 테이블 스키마 캡처
 - **예상 소요**: 1h
 
 ### Task 3.3.2: 운영 이벤트 API 구현
 - **설명**: FastAPI에 운영 이벤트 CRUD API를 추가한다. `POST /events/deployments`, `POST /events/incidents`, `POST /events/scenario_runs`, `GET /events/scenario_runs`. SQLAlchemy + asyncpg로 PostgreSQL에 접속한다.
 - **DoD (완료 정의)**:
-  - [ ] 배포 이벤트 기록 API 동작
-  - [ ] 인시던트 이벤트 기록 API 동작
-  - [ ] 시나리오 실행 기록 API 동작
-  - [ ] 시나리오 실행 목록 조회 API 동작
-  - [ ] API 테스트(pytest) 2개 이상 통과
+  - [x] 배포 이벤트 기록 API 동작
+  - [x] 인시던트 이벤트 기록 API 동작
+  - [x] 시나리오 실행 기록 API 동작
+  - [x] 시나리오 실행 목록 조회 API 동작
+  - [x] API 테스트(pytest) 2개 이상 통과 (5개, 커버리지 100%)
 - **산출물/캡처 포인트**: API 호출 예시 (curl 명령 및 응답)
 - **예상 소요**: 2h
 
