@@ -1,0 +1,243 @@
+{
+  "title": "Inference API — ML Observability",
+  "uid": "inference-api-v1",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "15s",
+  "time": { "from": "now-30m", "to": "now" },
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "HTTP RED Metrics",
+      "collapsed": false,
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 1 },
+      "panels": []
+    },
+    {
+      "id": 2,
+      "title": "RPS (Requests per Second)",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": { "x": 0, "y": 1, "w": 8, "h": 8 },
+      "targets": [
+        {
+          "expr": "sum(rate(request_count_total{endpoint=\"/predict\"}[1m]))",
+          "legendFormat": "RPS"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "reqps", "color": { "mode": "palette-classic" } }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Error Rate",
+      "type": "gauge",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": { "x": 8, "y": 1, "w": 8, "h": 8 },
+      "targets": [
+        {
+          "expr": "sum(rate(request_count_total{status=~\"4..|5..\"}[5m])) / sum(rate(request_count_total[5m]))",
+          "legendFormat": "Error Rate"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0, "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 0.01 },
+              { "color": "red", "value": 0.05 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "p95 Latency",
+      "type": "gauge",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": { "x": 16, "y": 1, "w": 8, "h": 8 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(request_latency_seconds_bucket{endpoint=\"/predict\"}[5m])) by (le))",
+          "legendFormat": "p95 Latency"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 0.1 },
+              { "color": "red", "value": 0.2 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "row",
+      "title": "Input Quality",
+      "collapsed": false,
+      "gridPos": { "x": 0, "y": 9, "w": 24, "h": 1 },
+      "panels": []
+    },
+    {
+      "id": 6,
+      "title": "Input Missing Rate",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": { "x": 0, "y": 10, "w": 6, "h": 8 },
+      "targets": [
+        {
+          "expr": "input_missing_rate",
+          "legendFormat": "{{sensor_id}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 0.3 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Drift Score",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": { "x": 6, "y": 10, "w": 6, "h": 8 },
+      "targets": [
+        {
+          "expr": "drift_score",
+          "legendFormat": "{{sensor_id}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 2.0 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Anomaly Rate",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": { "x": 12, "y": 10, "w": 6, "h": 8 },
+      "targets": [
+        {
+          "expr": "anomaly_rate",
+          "legendFormat": "{{sensor_id}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short", "min": 0, "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 1.0 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Input Delay (avg ms)",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": { "x": 18, "y": 10, "w": 6, "h": 8 },
+      "targets": [
+        {
+          "expr": "rate(input_delay_ms_sum[1m]) / rate(input_delay_ms_count[1m])",
+          "legendFormat": "{{sensor_id}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "ms" }
+      }
+    },
+    {
+      "id": 10,
+      "type": "row",
+      "title": "Summary",
+      "collapsed": false,
+      "gridPos": { "x": 0, "y": 18, "w": 24, "h": 1 },
+      "panels": []
+    },
+    {
+      "id": 11,
+      "title": "Total Requests",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": { "x": 0, "y": 19, "w": 6, "h": 4 },
+      "targets": [
+        {
+          "expr": "sum(request_count_total{endpoint=\"/predict\"})",
+          "legendFormat": "Total"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short" } }
+    },
+    {
+      "id": 12,
+      "title": "Active Anomaly Sensors",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": { "x": 6, "y": 19, "w": 6, "h": 4 },
+      "targets": [
+        {
+          "expr": "count(anomaly_rate == 1)",
+          "legendFormat": "Anomaly Sensors"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 1 }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "DS_PROMETHEUS",
+        "type": "datasource",
+        "pluginId": "prometheus",
+        "current": { "text": "Prometheus", "value": "Prometheus" }
+      }
+    ]
+  }
+}
