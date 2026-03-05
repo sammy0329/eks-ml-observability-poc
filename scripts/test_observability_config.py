@@ -71,8 +71,8 @@ class TestAlertingRules:
     def test_high_error_rate_rule_exists(self):
         assert "HighErrorRate" in self._rules()
 
-    def test_high_latency_rule_exists(self):
-        assert "HighLatency" in self._rules()
+    def test_high_request_rate_rule_exists(self):
+        assert "HighRequestRate" in self._rules()
 
     def test_high_missing_rate_rule_exists(self):
         assert "HighMissingRate" in self._rules()
@@ -88,14 +88,14 @@ class TestAlertingRules:
             assert "summary" in rule["annotations"], f"{name}: summary 없음"
 
     def test_high_error_rate_threshold(self):
-        # expr에 1% 기준이 포함되어 있어야 함
         rule = self._rules()["HighErrorRate"]
         assert "0.01" in rule["expr"] or "1" in rule["expr"]
 
-    def test_high_latency_uses_p95(self):
-        rule = self._rules()["HighLatency"]
-        expr = rule["expr"]
-        assert "0.95" in expr or "histogram_quantile" in expr
+    def test_high_request_rate_threshold(self):
+        # S1 로컬 리허설: 15 RPS 초과
+        rule = self._rules()["HighRequestRate"]
+        assert "15" in rule["expr"]
+        assert "request_count_total" in rule["expr"]
 
     def test_high_missing_rate_threshold(self):
         rule = self._rules()["HighMissingRate"]
