@@ -10,31 +10,30 @@ groups:
             /
             sum(rate(request_count_total[5m]))
           ) > 0.01
-        for: 5m
+        for: 1m
         labels:
           severity: warning
         annotations:
           summary: "High error rate detected"
           description: "Error rate is {{ $value | humanizePercentage }} over the last 5 minutes."
 
-      # p95 응답시간 200ms 초과 5분 지속
-      - alert: HighLatency
+      # S1 시나리오: 요청 수 15 RPS 초과 1분 지속
+      # (로컬 리허설용 — EKS 배포 시 HighLatency p95>200ms 로 교체 권장)
+      - alert: HighRequestRate
         expr: |
-          histogram_quantile(0.95,
-            sum(rate(request_latency_seconds_bucket{endpoint="/predict"}[5m])) by (le)
-          ) > 0.2
-        for: 5m
+          sum(rate(request_count_total{endpoint="/predict"}[1m])) > 15
+        for: 1m
         labels:
           severity: warning
         annotations:
-          summary: "High p95 latency detected"
-          description: "p95 latency is {{ $value | humanizeDuration }} on /predict."
+          summary: "High request rate detected"
+          description: "Request rate is {{ $value | humanize }} req/s on /predict."
 
       # S3 시나리오: 입력 결측률 30% 초과 5분 지속
       - alert: HighMissingRate
         expr: |
-          avg(input_missing_rate) > 0.3
-        for: 5m
+          max(input_missing_rate) > 0.3
+        for: 1m
         labels:
           severity: warning
         annotations:

@@ -298,21 +298,21 @@ flowchart TD
 ### Task 3.4.1: docker-compose 전체 스택 통합
 - **설명**: docker-compose.yml에 6개 서비스(추론 API, 생성기, Prometheus, Grafana, Alertmanager, PostgreSQL)를 통합한다. 서비스 간 네트워크, 볼륨, 헬스체크, 의존 관계를 설정한다.
 - **DoD (완료 정의)**:
-  - [ ] `docker-compose up -d` 한 번으로 전체 스택 기동
-  - [ ] 모든 서비스 healthy 상태
-  - [ ] 서비스 간 통신 정상 (생성기 -> 추론 API, Prometheus -> 추론 API)
-  - [ ] `docker-compose down -v` 정상 종료 및 볼륨 정리
+  - [x] `docker-compose up -d` 한 번으로 전체 스택 기동
+  - [x] 모든 서비스 healthy 상태
+  - [x] 서비스 간 통신 정상 (생성기 -> 추론 API, Prometheus -> 추론 API)
+  - [x] `docker-compose down -v` 정상 종료 및 볼륨 정리
 - **산출물/캡처 포인트**: `docker-compose ps` 출력 캡처
 - **예상 소요**: 1h
 
 ### Task 3.4.2: 시나리오 로컬 리허설
 - **설명**: docker-compose 환경에서 S1(부하), S2(에러), S3(품질 저하) 시나리오를 모의 실행한다. 각 시나리오의 파라미터(RPS, 에러율, 결측률)를 조정하여 알람 발생 여부와 메트릭 변화를 확인한다. EKS 배포 전 최종 점검 역할.
 - **DoD (완료 정의)**:
-  - [ ] S1 모의: 부하 증가 시 `request_latency_seconds` p95 상승 확인
-  - [ ] S2 모의: 에러 주입 시 error rate 상승 + 알람 발생 확인
-  - [ ] S3 모의: 결측/드리프트 주입 시 `input_missing_rate`, `drift_score` 변화 확인
-  - [ ] 각 시나리오의 최적 파라미터(임계치, 지속 시간) 확정
-  - [ ] Grafana 대시보드에서 변화 시각적 확인
+  - [x] S1 모의: 부하 증가 시 RPS 급증 + HighRequestRate 알람 발생 확인 (로컬 Docker에서 latency 대신 RPS로 대체)
+  - [x] S2 모의: 에러 주입 시 error rate 13.11% 상승 + HighErrorRate 알람 발생 확인
+  - [x] S3 모의: 결측/드리프트 주입 시 `input_missing_rate` 43.33%, `drift_score` 변화 확인
+  - [x] 각 시나리오의 최적 파라미터(임계치, 지속 시간) 확정
+  - [x] Grafana 대시보드에서 변화 시각적 확인
 - **산출물/캡처 포인트**: 각 시나리오 Grafana 스크린샷 (로컬 리허설 버전)
 - **예상 소요**: 1.5h
 

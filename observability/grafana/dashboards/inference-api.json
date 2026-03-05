@@ -19,7 +19,7 @@
       "id": 2,
       "title": "RPS (Requests per Second)",
       "type": "timeseries",
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "gridPos": { "x": 0, "y": 1, "w": 8, "h": 8 },
       "targets": [
         {
@@ -35,7 +35,7 @@
       "id": 3,
       "title": "Error Rate",
       "type": "gauge",
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "gridPos": { "x": 8, "y": 1, "w": 8, "h": 8 },
       "targets": [
         {
@@ -62,7 +62,7 @@
       "id": 4,
       "title": "p95 Latency",
       "type": "gauge",
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "gridPos": { "x": 16, "y": 1, "w": 8, "h": 8 },
       "targets": [
         {
@@ -96,7 +96,7 @@
       "id": 6,
       "title": "Input Missing Rate",
       "type": "timeseries",
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "gridPos": { "x": 0, "y": 10, "w": 6, "h": 8 },
       "targets": [
         {
@@ -121,7 +121,7 @@
       "id": 7,
       "title": "Drift Score",
       "type": "timeseries",
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "gridPos": { "x": 6, "y": 10, "w": 6, "h": 8 },
       "targets": [
         {
@@ -145,7 +145,7 @@
       "id": 8,
       "title": "Anomaly Rate",
       "type": "timeseries",
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "gridPos": { "x": 12, "y": 10, "w": 6, "h": 8 },
       "targets": [
         {
@@ -170,7 +170,7 @@
       "id": 9,
       "title": "Input Delay (avg ms)",
       "type": "timeseries",
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "gridPos": { "x": 18, "y": 10, "w": 6, "h": 8 },
       "targets": [
         {
@@ -194,7 +194,7 @@
       "id": 11,
       "title": "Total Requests",
       "type": "stat",
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "gridPos": { "x": 0, "y": 19, "w": 6, "h": 4 },
       "targets": [
         {
@@ -208,7 +208,7 @@
       "id": 12,
       "title": "Active Anomaly Sensors",
       "type": "stat",
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "gridPos": { "x": 6, "y": 19, "w": 6, "h": 4 },
       "targets": [
         {
