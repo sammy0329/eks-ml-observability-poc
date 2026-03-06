@@ -65,9 +65,9 @@ graph TB
 
 | 시나리오 | 프로파일 전환 | 발화 알람 | 검증 포인트 |
 |----------|--------------|----------|------------|
-| S1 — 부하 증가 | `PROFILE=load` | HighLatency | p95 > 200ms · HPA 스케일아웃 |
-| S2 — 에러 주입 | `PROFILE=error` | HighErrorRate | error rate > 1% · 롤백 |
-| S3 — 품질 저하 | `PROFILE=quality_degradation` | HighMissingRate | missing rate > 30% |
+| S1 — 부하 증가 | `PROFILE=load` | — | CPU 17%→63%, HPA 1→2 replica 스케일아웃 후 32% 안정화 |
+| S2 — 에러 주입 | `PROFILE=error` | HighErrorRate FIRING | 에러율 32% (422 응답), `for: 2m` 후 알람 발화 |
+| S3 — 품질 저하 | `PROFILE=quality_degradation` | HighMissingRate FIRING | missing rate 50% (임계 30% 초과), 알람 발화 |
 
 ```bash
 # 시나리오 전환
