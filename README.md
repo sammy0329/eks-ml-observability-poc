@@ -209,6 +209,8 @@ eks-ml-observability-poc/
 
 | 문서 | 내용 |
 |------|------|
+| [User Guide](docs/user-guide.md) | 로컬·EKS 실행 매뉴얼 및 데모 시나리오 |
 | [구현 계획](docs/PLAN.md) | 5일 Phase별 구현 계획 |
 | [Task 분해](docs/TASKS.md) | Epic/Task DoD 체크리스트 |
 | [기술 스택](docs/TechStack.md) | 기술 선택 근거 매트릭스 |
+| [운영 리포트](docs/REPORT.md) | S1/S2/S3 실측 결과 및 트러블슈팅 |
