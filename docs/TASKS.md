@@ -467,10 +467,10 @@ flowchart TD
 - **DoD (완료 정의)**:
   - [x] README.md에 프로젝트 개요, 아키텍처 다이어그램, 로컬 실행 방법, EKS 배포 방법 포함
   - [x] 모든 산출물(스크린샷, 리포트) 존재 확인
-  - [x] `eksctl delete cluster` 실행 (진행 중)
-  - [ ] CloudFormation 콘솔에서 스택 삭제 완료 확인
-  - [ ] ECR 리포지토리 삭제
-  - [ ] 잔존 ELB/NAT Gateway 없음 확인
+  - [x] `eksctl delete cluster` 실행 완료 (all cluster resources were deleted)
+  - [x] CloudFormation 콘솔에서 스택 삭제 완료 확인
+  - [x] ECR 리포지토리 삭제 (inference-api, sensor-generator)
+  - [x] 잔존 ELB/NAT Gateway 없음 확인
 - **산출물/캡처 포인트**: 최종 README.md, 클러스터 삭제 확인 캡처
 - **예상 소요**: 1h
 

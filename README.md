@@ -153,7 +153,7 @@ EOF
 kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80
 kubectl port-forward -n monitoring svc/kube-prometheus-stack-prometheus 9090:9090
 
-# 6. 클러스터 삭제 (비용 절약)
+# 8. 클러스터 삭제 (비용 절약)
 eksctl delete cluster --name sensor-obs-poc --region ap-northeast-2
 ```
 
