@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sensor-generator
+  labels:
+    app: sensor-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sensor-generator
+  template:
+    metadata:
+      labels:
+        app: sensor-generator
+    spec:
+      containers:
+        - name: sensor-generator
+          image: 523816102772.dkr.ecr.ap-northeast-2.amazonaws.com/sensor-generator:latest
+          env:
+            - name: TARGET_URL
+              value: http://inference-api:8000
+            - name: PROFILE
+              # 시나리오 전환: kubectl set env deployment/sensor-generator PROFILE=load
+              # S1: load | S2: error | S3: quality_degradation | 기본: normal
+              value: normal
+            - name: SENSOR_ID
+              value: sensor-eks-01
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi

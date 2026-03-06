@@ -1,0 +1,144 @@
+# kube-prometheus-stack Helm values
+# 대상: t3.medium × 2 노드 (vCPU 2 × 2 = 4, RAM 4GiB × 2 = 8GiB)
+# 목표: 전체 모니터링 스택이 노드 리소스의 50% 이하 사용
+
+# ── Prometheus ────────────────────────────────────────────────────────────────
+prometheus:
+  prometheusSpec:
+    retention: 6h           # PoC용 단기 보존 (비용 최소화)
+    scrapeInterval: 15s
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    # inference-api ServiceMonitor 자동 감지
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
+    # 알람 룰 자동 감지
+    ruleSelectorNilUsesHelmValues: false
+    ruleSelector: {}
+
+# ── Grafana ───────────────────────────────────────────────────────────────────
+grafana:
+  adminPassword: admin
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  # 로컬 대시보드 프로비저닝 비활성화 (포트포워드로 접근)
+  service:
+    type: ClusterIP
+
+# ── Alertmanager ──────────────────────────────────────────────────────────────
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ["alertname"]
+      group_wait: 10s
+      group_interval: 5m
+      repeat_interval: 1h
+      receiver: "null"
+    receivers:
+      - name: "null"
+
+# ── node-exporter (경량 유지) ─────────────────────────────────────────────────
+prometheus-node-exporter:
+  resources:
+    requests:
+      cpu: 30m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+# ── kube-state-metrics (HPA 모니터링에 필요) ──────────────────────────────────
+kube-state-metrics:
+  resources:
+    requests:
+      cpu: 30m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+# ── EKS 알람 룰 ──────────────────────────────────────────────────────────────
+# 로컬 alerting_rules.yml 대비 변경:
+#   - HighRequestRate → HighLatency (EKS는 p95 > 200ms 측정 가능)
+#   - for: 1m → for: 2m (운영 환경 오탐 방지)
+additionalPrometheusRulesMap:
+  inference-api-rules:
+    groups:
+      - name: inference-api.rules
+        rules:
+
+          # S1: p95 레이턴시 200ms 초과 (EKS 환경에서 유효)
+          - alert: HighLatency
+            expr: |
+              histogram_quantile(0.95,
+                sum(rate(request_latency_seconds_bucket{endpoint="/predict"}[5m]))
+                by (le)
+              ) > 0.2
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High p95 latency detected"
+              description: "p95 latency is {{ $value | humanizeDuration }} on /predict."
+
+          # S2: 에러율 1% 초과
+          - alert: HighErrorRate
+            expr: |
+              (
+                sum(rate(request_count_total{status=~"4..|5.."}[5m]))
+                /
+                sum(rate(request_count_total[5m]))
+              ) > 0.01
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High error rate detected"
+              description: "Error rate is {{ $value | humanizePercentage }} over the last 5 minutes."
+
+          # S3: 입력 결측률 30% 초과
+          - alert: HighMissingRate
+            expr: |
+              max(input_missing_rate) > 0.3
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High input missing rate detected"
+              description: "Max input missing rate is {{ $value | humanizePercentage }}."
+
+# ── ServiceMonitor (inference-api 스크랩) ─────────────────────────────────────
+# 별도 servicemonitor.yaml 적용 또는 아래 additionalServiceMonitors 사용
+additionalServiceMonitors:
+  - name: inference-api
+    selector:
+      matchLabels:
+        app: inference-api
+    endpoints:
+      - port: http
+        path: /metrics
+        interval: 15s
+    namespaceSelector:
+      matchNames:
+        - default
