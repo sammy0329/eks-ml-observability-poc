@@ -26,6 +26,8 @@ spec:
               value: poc
             - name: POSTGRES_DB
               value: poc
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           resources:
             requests:
               cpu: 100m

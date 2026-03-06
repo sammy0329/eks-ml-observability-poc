@@ -325,20 +325,20 @@ flowchart TD
 ### Task 4.1.1: EKS 클러스터 생성
 - **설명**: eksctl을 사용하여 EKS 클러스터를 생성한다. 클러스터 설정 YAML(`cluster.yaml`)을 작성하여 리전(ap-northeast-2), 노드 타입(t3.medium), 노드 수(2), K8s 버전(1.29) 등을 정의한다.
 - **DoD (완료 정의)**:
-  - [ ] `cluster.yaml` 작성 완료
-  - [ ] `eksctl create cluster -f cluster.yaml` 실행 성공 (15-20분)
-  - [ ] `kubectl get nodes` 2개 노드 `Ready` 상태
-  - [ ] `kubectl cluster-info` 정상 출력
+  - [x] `cluster.yaml` 작성 완료
+  - [x] `eksctl create cluster -f cluster.yaml` 실행 성공 (실제: m7i-flex.large — free-tier-eligible 제한으로 인스턴스 타입 변경)
+  - [x] `kubectl get nodes` 2개 노드 `Ready` 상태
+  - [x] `kubectl cluster-info` 정상 출력
 - **산출물/캡처 포인트**: `kubectl get nodes` 출력 캡처, `cluster.yaml` 파일
 - **예상 소요**: 1h (실행 + 대기)
 
 ### Task 4.1.2: ECR 리포지토리 생성 및 이미지 푸시
 - **설명**: AWS ECR에 추론 서비스와 생성기 이미지를 위한 리포지토리를 생성하고, Docker 이미지를 빌드하여 푸시한다.
 - **DoD (완료 정의)**:
-  - [ ] ECR 리포지토리 2개 생성 (inference-api, sensor-generator)
-  - [ ] `aws ecr get-login-password` 성공
-  - [ ] 두 이미지 모두 ECR 푸시 완료
-  - [ ] ECR 콘솔에서 이미지 태그 확인
+  - [x] ECR 리포지토리 2개 생성 (inference-api, sensor-generator)
+  - [x] `aws ecr get-login-password` 성공
+  - [x] 두 이미지 모두 ECR 푸시 완료
+  - [x] ECR 콘솔에서 이미지 태그 확인
 - **산출물/캡처 포인트**: ECR 콘솔 이미지 목록 캡처
 - **예상 소요**: 0.5h
 
@@ -349,43 +349,43 @@ flowchart TD
 ### Task 4.2.1: K8s 매니페스트 작성 (Deployment, Service, HPA)
 - **설명**: 추론 서비스의 K8s 매니페스트를 작성한다. Deployment(replicas: 1, ECR 이미지, 리소스 제한, 헬스체크), Service(ClusterIP 또는 LoadBalancer), HPA(CPU 50% 타겟, min: 1, max: 5).
 - **DoD (완료 정의)**:
-  - [ ] `deployment.yaml` : ECR 이미지 참조, 리소스 request/limit, liveness/readiness probe
-  - [ ] `service.yaml` : 포트 매핑, ServiceMonitor 어노테이션
-  - [ ] `hpa.yaml` : CPU 기반 autoscaling, min 1 / max 5
-  - [ ] `kubectl apply` 성공, Pod `Running` 상태
+  - [x] `deployment.yaml` : ECR 이미지 참조, 리소스 request/limit, liveness/readiness probe
+  - [x] `service.yaml` : 포트 매핑, ServiceMonitor 어노테이션
+  - [x] `hpa.yaml` : CPU 기반 autoscaling, min 1 / max 5
+  - [x] `kubectl apply` 성공, Pod `Running` 상태
 - **산출물/캡처 포인트**: `kubectl get all` 출력 캡처
 - **예상 소요**: 1h
 
 ### Task 4.2.2: kube-prometheus-stack Helm 배포
 - **설명**: Helm으로 kube-prometheus-stack을 설치한다. 커스텀 values.yaml로 Grafana 대시보드 프로비저닝, alerting rules, ServiceMonitor 설정을 포함한다. 리소스 요청을 최소화하여 t3.medium 노드에서 동작하도록 조정한다.
 - **DoD (완료 정의)**:
-  - [ ] `helm install` 성공
-  - [ ] Prometheus Pod `Running`
-  - [ ] Grafana Pod `Running`
-  - [ ] Alertmanager Pod `Running`
-  - [ ] Prometheus targets에서 추론 서비스 `UP`
-  - [ ] Grafana port-forward 후 대시보드 접근 가능
+  - [x] `helm install` 성공
+  - [x] Prometheus Pod `Running`
+  - [x] Grafana Pod `Running`
+  - [x] Alertmanager Pod `Running`
+  - [x] Prometheus targets에서 추론 서비스 `UP` (ServiceMonitor 직접 적용)
+  - [x] Grafana port-forward 후 대시보드 접근 가능
 - **산출물/캡처 포인트**: `kubectl get pods -n monitoring` 출력, Prometheus Targets 캡처
 - **예상 소요**: 1.5h
 
 ### Task 4.2.3: PostgreSQL 배포 및 스키마 초기화
 - **설명**: EKS 클러스터 내에 PostgreSQL Pod를 배포한다 (PVC 포함). 초기화 ConfigMap으로 테이블을 자동 생성한다.
 - **DoD (완료 정의)**:
-  - [ ] PostgreSQL Pod `Running`
-  - [ ] PVC 바인딩 완료
-  - [ ] `kubectl exec` 으로 psql 접속 후 3개 테이블 존재 확인
-  - [ ] 추론 서비스에서 PostgreSQL 접속 가능 (환경 변수 설정)
+  - [x] PostgreSQL Pod `Running`
+  - [x] PVC 바인딩 완료 (aws-ebs-csi-driver addon 설치 + PGDATA 서브디렉토리 설정)
+  - [x] `kubectl exec` 으로 psql 접속 후 3개 테이블 존재 확인
+  - [x] 추론 서비스에서 PostgreSQL 접속 가능 (환경 변수 설정)
 - **산출물/캡처 포인트**: PostgreSQL 테이블 목록 캡처
 - **예상 소요**: 1h
 
 ### Task 4.2.4: EKS 전체 서비스 연동 검증
 - **설명**: EKS 환경에서 추론 서비스, 생성기, Prometheus, Grafana, Alertmanager, PostgreSQL이 모두 정상 동작하는지 종합 검증한다.
 - **DoD (완료 정의)**:
-  - [ ] 생성기에서 추론 서비스로 요청 전송 확인
-  - [ ] Prometheus에서 추론 서비스 메트릭 수집 확인
-  - [ ] Grafana 대시보드에 실시간 데이터 렌더링
-  - [ ] PostgreSQL에 이벤트 기록 가능
-  - [ ] HPA `TARGETS` 열에 CPU% 표시 (metrics-server 동작 확인)
+  - [x] 생성기에서 추론 서비스로 요청 전송 확인
+  - [x] Prometheus에서 추론 서비스 메트릭 수집 확인 (request_count_total 수집 중)
+  - [ ] Grafana 대시보드에 실시간 데이터 렌더링 (Phase 5에서 스크린샷 캡처)
+  - [x] PostgreSQL에 이벤트 기록 가능
+  - [ ] HPA `TARGETS` 열에 CPU% 표시 (metrics-server 확인 필요)
 - **산출물/캡처 포인트**: Grafana 대시보드 실시간 데이터 스크린샷
 - **예상 소요**: 1h
 
