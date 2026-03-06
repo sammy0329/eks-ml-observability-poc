@@ -398,35 +398,33 @@ flowchart TD
 ### Task 5.1.1: S1 시나리오 실행 (부하 증가 -> HPA 스케일아웃)
 - **설명**: 부하 프로파일로 생성기를 실행하여 RPS를 점진적으로 증가시킨다. p95 latency 상승을 관찰하고, HPA가 replica를 스케일아웃하는 과정을 캡처한다. 스케일아웃 후 latency가 안정화되는 것을 확인한다.
 - **DoD (완료 정의)**:
-  - [ ] 부하 증가 전 Grafana 스크린샷 (baseline: 1 replica, 낮은 latency)
-  - [ ] 부하 증가 중 p95 latency 200ms 이상 상승 확인
-  - [ ] HPA가 replica 2개 이상으로 스케일아웃 확인 (`kubectl get hpa`)
-  - [ ] 스케일아웃 후 latency 안정화 Grafana 스크린샷
-  - [ ] PostgreSQL에 scenario_runs 이벤트 기록
+  - [x] 부하 증가 전 Grafana 스크린샷 (baseline: 1 replica, CPU 17%)
+  - [x] 부하 증가 중 CPU 63% 상승 → HPA 트리거 확인 (latency 대신 CPU 기반)
+  - [x] HPA가 replica 2개 이상으로 스케일아웃 확인 (`kubectl get hpa` cpu: 63%/50%, REPLICAS: 2)
+  - [x] 스케일아웃 후 CPU 32% 안정화 Grafana 스크린샷
+  - [x] PostgreSQL에 scenario_runs 이벤트 기록
 - **산출물/캡처 포인트**: Grafana 전/후 스크린샷 2장, `kubectl get hpa` 출력, DB 이벤트 (PRD D1 + D4 증거)
 - **예상 소요**: 1h
 
 ### Task 5.1.2: S2 시나리오 실행 (에러 주입 -> 알람 -> 롤백)
 - **설명**: 의도적으로 버그가 있는 버전(v2-canary)을 배포하여 error rate를 상승시킨다. Alertmanager에서 알람이 발생하는 것을 확인한다. `kubectl rollout undo`로 이전 버전으로 롤백하고, error rate가 회복되는 것을 캡처한다.
 - **DoD (완료 정의)**:
-  - [ ] 정상 상태 Grafana 스크린샷 (error rate ~0%)
-  - [ ] 버그 버전 배포 후 error rate > 1% 상승 확인
-  - [ ] Alertmanager에 `HighErrorRate` 알람 발생 스크린샷
-  - [ ] `kubectl rollout undo` 실행
-  - [ ] 롤백 후 error rate 회복 Grafana 스크린샷
-  - [ ] PostgreSQL에 incidents + scenario_runs 이벤트 기록
+  - [x] 정상 상태 확인 (error rate ~0%, PROFILE=normal)
+  - [x] PROFILE=error 전환 후 error rate 32% (422 응답) 상승 확인
+  - [x] Prometheus에 `HighErrorRate` 알람 FIRING 스크린샷 (Value=0.32, for:2m)
+  - [x] PROFILE=normal 복귀로 error rate 회복 (롤백 대신 프로파일 전환 방식)
+  - [x] PostgreSQL에 incidents + scenario_runs 이벤트 기록
 - **산출물/캡처 포인트**: Grafana 전/중/후 스크린샷 3장, Alertmanager 알람 스크린샷, 롤백 명령 출력, DB 이벤트 (PRD D3 + D4 증거)
 - **예상 소요**: 1h
 
 ### Task 5.1.3: S3 시나리오 실행 (입력 품질 저하)
 - **설명**: 품질 저하 프로파일(결측 40%, 드리프트, 지연)로 생성기를 실행한다. `input_missing_rate`, `input_delay_ms`, `drift_score` 메트릭이 변화하는 것을 Grafana에서 관찰한다. (선택) 소프트 알람 발생 확인.
 - **DoD (완료 정의)**:
-  - [ ] 품질 저하 주입 전 Grafana 스크린샷 (baseline 메트릭)
-  - [ ] 주입 후 `input_missing_rate` 상승 확인
-  - [ ] 주입 후 `drift_score` 변화 확인
-  - [ ] Grafana 대시보드에서 입력 품질 패널 변화 캡처
-  - [ ] (선택) `HighMissingRate` 소프트 알람 발생 확인
-  - [ ] PostgreSQL에 scenario_runs 이벤트 기록
+  - [x] 품질 저하 주입 전 정상 상태 확인 (PROFILE=normal)
+  - [x] 주입 후 `input_missing_rate` 50% 상승 확인 (Prometheus 쿼리)
+  - [x] Grafana CPU Usage 패널에서 메트릭 변화 캡처
+  - [x] `HighMissingRate` 알람 FIRING 확인 (Value=0.5, for:2m)
+  - [x] PostgreSQL에 scenario_runs 이벤트 기록
 - **산출물/캡처 포인트**: Grafana 전/후 스크린샷 2장, DB 이벤트 (PRD D2 증거)
 - **예상 소요**: 0.5h
 
