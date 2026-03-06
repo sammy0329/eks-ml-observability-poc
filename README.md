@@ -112,18 +112,44 @@ eksctl create cluster -f infra/eksctl/cluster.yaml
 # 2. ECR 리포지토리 생성 및 이미지 푸시
 ./scripts/setup_ecr.sh
 
-# 3. K8s 매니페스트 배포
+# 3. EBS CSI 드라이버 설치 (PostgreSQL PVC 필수)
+aws eks create-addon --cluster-name sensor-obs-poc \
+  --addon-name aws-ebs-csi-driver --region ap-northeast-2
+
+# 4. K8s 매니페스트 배포
 kubectl apply -f k8s/base/postgresql/
 kubectl apply -f k8s/base/inference-api/
 kubectl apply -f k8s/base/sensor-generator/
 
-# 4. 모니터링 스택 설치
+# 5. 모니터링 스택 설치
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
   --namespace monitoring --create-namespace \
   -f k8s/helm-values/kube-prometheus-stack.yaml
 
-# 5. 접속 (포트포워드)
+# 6. inference-api ServiceMonitor 적용 (Prometheus 스크랩 연동)
+kubectl apply -f - <<EOF
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: inference-api
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: inference-api
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+  namespaceSelector:
+    matchNames:
+      - default
+EOF
+
+# 7. 접속 (포트포워드)
 kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80
 kubectl port-forward -n monitoring svc/kube-prometheus-stack-prometheus 9090:9090
 
